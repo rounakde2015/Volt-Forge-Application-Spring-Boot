@@ -1,19 +1,19 @@
 package com.voltforge.app.model;
 
 public class CategoryModel {
-    private long categoryId;
+    private Long categoryId;
     private String categoryName;
 
-    public CategoryModel(long categoryId, String categoryName) {
+    public CategoryModel(Long categoryId, String categoryName) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
     }
 
-    public long getCategoryId() {
+    public Long getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(long categoryId) {
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 

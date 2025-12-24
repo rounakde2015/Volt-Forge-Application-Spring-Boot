@@ -6,5 +6,10 @@ import java.util.List;
 
 public interface CategoryService {
     List<CategoryModel> getAllCategories();
+
     void addCategory(CategoryModel category);
+
+    String deleteCategory(Long categoryId);
+
+    String updateCategory(Long categoryId,  CategoryModel category);
 }
