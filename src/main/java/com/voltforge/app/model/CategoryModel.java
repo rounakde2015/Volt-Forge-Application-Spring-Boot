@@ -1,17 +1,16 @@
 package com.voltforge.app.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity(name = "volt-forge-categories")
 public class CategoryModel {
     @Id
+    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long categoryId;
     private String categoryName;
 
-    public CategoryModel() {
-
-    }
+    public CategoryModel() {}
 
     public CategoryModel(Long categoryId, String categoryName) {
         this.categoryId = categoryId;
