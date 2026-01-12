@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-@Entity(name = "volt-forge-categories")
+@Entity(name = "VoltForgeCategories")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,7 +16,7 @@ public class CategoryModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long categoryId;
 
-    @NotNull
+
     @NotBlank
     @Size(min = 5, message = "Category name must contain atleast 5 characters.")
     private String categoryName;

@@ -1,15 +1,13 @@
 package com.voltforge.app.service;
 
+import com.voltforge.app.exception.APIException;
+import com.voltforge.app.exception.ResourceNotFoundException;
 import com.voltforge.app.model.CategoryModel;
 import com.voltforge.app.respository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CatergorySeviceImpl implements CategoryService {
@@ -18,11 +16,24 @@ public class CatergorySeviceImpl implements CategoryService {
 
     @Override
     public List<CategoryModel> getAllCategories() {
+        List<CategoryModel> allCategories = categoryRepository.findAll();
+
+        if (allCategories.isEmpty()) {
+            throw new APIException("No Categories created !!!");
+        }
+
         return categoryRepository.findAll();
     }
 
     @Override
     public void addCategory(CategoryModel category) {
+        CategoryModel savedCategory = categoryRepository.findByCategoryName((category.getCategoryName()));
+        System.out.println(savedCategory);
+
+        if (savedCategory != null) {
+            throw new APIException("Category with the name " + category.getCategoryName() + " already exists");
+        }
+
         categoryRepository.save(category);
 
     }
@@ -31,7 +42,7 @@ public class CatergorySeviceImpl implements CategoryService {
     public String deleteCategory(Long categoryId) {
         CategoryModel category = categoryRepository
                 .findById(categoryId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category with categoryId: " + categoryId +" not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("category",  "CategoryId", categoryId));
 
         categoryRepository.delete(category);
 
@@ -42,7 +53,7 @@ public class CatergorySeviceImpl implements CategoryService {
     public CategoryModel updateCategory(Long categoryId,  CategoryModel category) {
         categoryRepository
                 .findById(categoryId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category with categoryId: " + categoryId + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("category",  "CategoryId", categoryId));
 
         category.setCategoryId(categoryId);
 
