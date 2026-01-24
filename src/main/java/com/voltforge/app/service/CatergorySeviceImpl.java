@@ -3,7 +3,10 @@ package com.voltforge.app.service;
 import com.voltforge.app.exception.APIException;
 import com.voltforge.app.exception.ResourceNotFoundException;
 import com.voltforge.app.model.CategoryModel;
+import com.voltforge.app.payload.CategoryDTO;
+import com.voltforge.app.payload.CategoryResponse;
 import com.voltforge.app.respository.CategoryRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,49 +17,64 @@ public class CatergorySeviceImpl implements CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
-    public List<CategoryModel> getAllCategories() {
+    public CategoryResponse getAllCategories() {
         List<CategoryModel> allCategories = categoryRepository.findAll();
 
         if (allCategories.isEmpty()) {
             throw new APIException("No Categories created !!!");
         }
 
-        return categoryRepository.findAll();
+        List<CategoryDTO> categoryDTOS = allCategories.stream()
+                .map(category -> modelMapper.map(category, CategoryDTO.class))
+                .toList();
+
+        CategoryResponse categoryResponse = new CategoryResponse();
+        categoryResponse.setContent(categoryDTOS);
+
+        return categoryResponse;
     }
 
     @Override
-    public void addCategory(CategoryModel category) {
-        CategoryModel savedCategory = categoryRepository.findByCategoryName((category.getCategoryName()));
-        System.out.println(savedCategory);
+    public CategoryDTO addCategory(CategoryDTO categoryDTO) {
+        CategoryModel categoryModel = modelMapper.map(categoryDTO, CategoryModel.class);
 
-        if (savedCategory != null) {
-            throw new APIException("Category with the name " + category.getCategoryName() + " already exists");
+        CategoryModel existingCategoryFromDB = categoryRepository.findByCategoryName((categoryModel.getCategoryName()));
+
+        if (existingCategoryFromDB != null) {
+            throw new APIException("Category with the name " + categoryModel.getCategoryName() + " already exists");
         }
 
-        categoryRepository.save(category);
+        CategoryModel savedCategory = categoryRepository.save(categoryModel);
+
+        return modelMapper.map(savedCategory, CategoryDTO.class);
 
     }
 
     @Override
-    public String deleteCategory(Long categoryId) {
+    public CategoryDTO deleteCategory(Long categoryId) {
         CategoryModel category = categoryRepository
                 .findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("category",  "CategoryId", categoryId));
 
         categoryRepository.delete(category);
 
-        return "Category with categoryId: " + categoryId + " has been deleted";
+        return modelMapper.map(category, CategoryDTO.class);
     }
 
     @Override
-    public CategoryModel updateCategory(Long categoryId,  CategoryModel category) {
+    public CategoryDTO updateCategory(Long categoryId,  CategoryDTO categoryDTO) {
         categoryRepository
                 .findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("category",  "CategoryId", categoryId));
 
+        CategoryModel category =  modelMapper.map(categoryDTO, CategoryModel.class);
+
         category.setCategoryId(categoryId);
 
-        return categoryRepository.save(category);
+        return modelMapper.map(categoryRepository.save(category), CategoryDTO.class);
     }
 }

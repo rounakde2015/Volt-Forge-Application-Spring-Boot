@@ -1,15 +1,18 @@
 package com.voltforge.app.service;
 
 import com.voltforge.app.model.CategoryModel;
+import com.voltforge.app.payload.CategoryDTO;
+import com.voltforge.app.payload.CategoryResponse;
 
 import java.util.List;
 
 public interface CategoryService {
-    List<CategoryModel> getAllCategories();
 
-    void addCategory(CategoryModel category);
+    CategoryResponse getAllCategories();
 
-    String deleteCategory(Long categoryId);
+    CategoryDTO addCategory(CategoryDTO categoryDto);
 
-    CategoryModel updateCategory(Long categoryId,  CategoryModel category);
+    CategoryDTO deleteCategory(Long categoryId);
+
+    CategoryDTO updateCategory(Long categoryId,  CategoryDTO categoryDTO);
 }
