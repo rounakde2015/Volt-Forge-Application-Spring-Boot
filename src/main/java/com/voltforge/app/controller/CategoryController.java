@@ -1,5 +1,6 @@
 package com.voltforge.app.controller;
 
+import com.voltforge.app.config.AppConstants;
 import com.voltforge.app.payload.CategoryDTO;
 import com.voltforge.app.payload.CategoryResponse;
 import com.voltforge.app.service.CategoryService;
@@ -17,8 +18,11 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/public/categories")
-    public ResponseEntity<CategoryResponse> getAllCategories() {
-        CategoryResponse categories = categoryService.getAllCategories();
+    public ResponseEntity<CategoryResponse> getAllCategories(@RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+                                                             @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+                                                             @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_CATEGORIES_BY, required = false) String sortBy,
+                                                             @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_CATEGORIES_ORDER, required = false) String sortOrder) {
+        CategoryResponse categories = categoryService.getAllCategories(pageNumber, pageSize, sortBy, sortOrder);
 
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
@@ -34,13 +38,13 @@ public class CategoryController {
     public ResponseEntity<CategoryDTO> deleteCategory(@PathVariable Long categoryId) {
         CategoryDTO deletedCategoryDTO = categoryService.deleteCategory(categoryId);
 
-        return new ResponseEntity<>(deletedCategoryDTO,  HttpStatus.OK);
+        return new ResponseEntity<>(deletedCategoryDTO, HttpStatus.OK);
     }
 
     @PutMapping("/admin/categories/{categoryId}")
     public ResponseEntity<CategoryDTO> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO, @PathVariable Long categoryId) {
         CategoryDTO updatedCategoryDTO = categoryService.updateCategory(categoryId, categoryDTO);
 
-        return new ResponseEntity<>(updatedCategoryDTO,  HttpStatus.OK);
+        return new ResponseEntity<>(updatedCategoryDTO, HttpStatus.OK);
     }
 }
