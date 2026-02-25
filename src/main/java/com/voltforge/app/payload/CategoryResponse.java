@@ -11,6 +11,13 @@ public class CategoryResponse {
     private Long totalElements;
     private boolean isLastPage;
 
+    public CategoryResponse() {
+    }
+
+    public CategoryResponse(List<CategoryDTO> categories) {
+        this.categories = categories;
+    }
+
     public Integer getPageNumber() {
         return pageNumber;
     }
@@ -49,15 +56,6 @@ public class CategoryResponse {
 
     public void setLastPage(boolean lastPage) {
         isLastPage = lastPage;
-    }
-
-
-
-    public CategoryResponse() {
-    }
-
-    public CategoryResponse(List<CategoryDTO> categories) {
-        this.categories = categories;
     }
 
     public List<CategoryDTO> getCategories() {
