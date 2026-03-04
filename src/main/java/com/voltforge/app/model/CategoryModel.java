@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 @Entity(name = "VoltForgeCategories")
 
 public class CategoryModel {
@@ -16,9 +18,13 @@ public class CategoryModel {
     @Size(min = 5, message = "Category name must contain atleast 5 characters.")
     private String categoryName;
 
-    public CategoryModel(Long categoryId, String categoryName) {
+    @OneToMany(mappedBy = "categoryModel",  cascade = CascadeType.ALL)
+    private List<ProductModel> products;
+
+    public CategoryModel(Long categoryId, String categoryName,  List<ProductModel> products) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
+        this.products = products;
     }
 
     public CategoryModel() {
@@ -41,5 +47,11 @@ public class CategoryModel {
         this.categoryName = categoryName;
     }
 
+    public List<ProductModel> getProducts() {
+        return products;
+    }
 
+    public void setProducts(List<ProductModel> products) {
+        this.products = products;
+    }
 }

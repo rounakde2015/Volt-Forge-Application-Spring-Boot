@@ -1,5 +1,6 @@
 package com.voltforge.app.controller;
 
+import com.voltforge.app.config.AppConstants;
 import com.voltforge.app.model.ProductModel;
 import com.voltforge.app.payload.ProductDTO;
 import com.voltforge.app.payload.ProductResponse;
@@ -20,15 +21,20 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping("/admin/categories/{categoryId}/product")
-    public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductDTO productDTO, @PathVariable Long categoryId) {
+    public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductDTO productDTO,
+                                                 @PathVariable Long categoryId) {
         ProductDTO savedProductDTO = productService.addProduct(categoryId, productDTO);
 
         return new ResponseEntity<>(savedProductDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/public/products")
-    public ResponseEntity<ProductResponse> getAllProducts() {
-        ProductResponse productResponse = productService.getAllProducts();
+    public ResponseEntity<ProductResponse> getAllProducts(@RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+                                                          @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+                                                          @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_PRODUCTS_BY, required = false) String sortBy,
+                                                          @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_PRODUCTS_ORDER, required = false) String sortOrder) {
+
+        ProductResponse productResponse = productService.getAllProducts(pageNumber, pageSize, sortBy, sortOrder);
 
         return new ResponseEntity<>(productResponse, HttpStatus.OK);
     }
@@ -48,8 +54,13 @@ public class ProductController {
     }
 
     @GetMapping("/public/products/keyword/{keyword}")
-    public ResponseEntity<ProductResponse> getProductByKeyword(@PathVariable String keyword) {
-        ProductResponse productResponse = productService.getProductByKeyWord(keyword);
+    public ResponseEntity<ProductResponse> getProductByKeyword(@PathVariable String keyword,
+                                                               @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+                                                               @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+                                                               @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_PRODUCTS_BY, required = false) String sortBy,
+                                                               @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_PRODUCTS_ORDER, required = false) String sortOrder) {
+
+        ProductResponse productResponse = productService.getProductByKeyWord(keyword, pageNumber, pageSize, sortBy, sortOrder);
 
         return new ResponseEntity<>(productResponse, HttpStatus.OK);
     }

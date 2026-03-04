@@ -1,6 +1,8 @@
 package com.voltforge.app.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity(name = "VoltForgeProducts")
 public class ProductModel {
@@ -9,8 +11,12 @@ public class ProductModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
+    @NotBlank
+    @Size(max = 3, message = "Product name must contain atleast 3 characters")
     private String productName;
 
+    @NotBlank
+    @Size(max = 6, message = "Product name must contain atleast 6 characters")
     private String productDescription;
 
     private Integer productQuantity;
