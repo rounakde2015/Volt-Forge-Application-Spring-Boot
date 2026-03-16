@@ -33,6 +33,10 @@ public class ProductModel {
     @JoinColumn(name = "category_id")
     private CategoryModel categoryModel;
 
+    @ManyToOne
+    @JoinColumn(name = "seller_id")
+    private UserModel userModel;
+
     public ProductModel() {
     }
 
@@ -44,7 +48,8 @@ public class ProductModel {
                         double productDiscountPercentage,
                         double productSpecialPrice,
                         String productImage,
-                        CategoryModel categoryModel) {
+                        CategoryModel categoryModel,
+                        UserModel userModel) {
         this.productId = productId;
         this.productName = productName;
         this.productDescription = productDescription;
@@ -54,6 +59,7 @@ public class ProductModel {
         this.productSpecialPrice = productSpecialPrice;
         this.productImage = productImage;
         this.categoryModel = categoryModel;
+        this.userModel = userModel;
     }
 
     public Long getProductId() {
@@ -126,5 +132,13 @@ public class ProductModel {
 
     public void setCategoryModel(CategoryModel categoryModel) {
         this.categoryModel = categoryModel;
+    }
+
+    public UserModel getUserModel() {
+        return userModel;
+    }
+
+    public void setUserModel(UserModel userModel) {
+        this.userModel = userModel;
     }
 }

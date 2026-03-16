@@ -1,0 +1,163 @@
+package com.voltforge.app.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+@Entity
+@Table(name = "VoltForgeUsers", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_mobile_number", "user_enail_id"})
+})
+public class UserModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userId;
+
+    @Column(name = "user_first_name")
+    @NotBlank
+    @Size(max = 50)
+    private String userFirstName;
+
+    @Column(name = "user_middle_name")
+    @Size(max = 50)
+    private String userMiddleName;
+
+    @Column(name = "user_last_name")
+    @NotBlank
+    @Size(max = 50)
+    private String userLastName;
+
+    @Column(name = "user_email_id")
+    @NotBlank
+    @Size(max = 50)
+    @Email(message = "Invalid Email")
+    private String userEmail;
+
+    @Column(name = "user_mobile_number")
+    @NotBlank
+    @Size(min = 10, max = 10)
+    @Pattern(regexp = "^(?:\\+91|91)?[1-9][0-9]{9}$", message = "Invalid mobile number")
+    private String userMobileNumber;
+
+    @Column(name = "user_password")
+    @NotBlank
+    private String userPassword;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinTable(name = "volt_forge_users_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<RoleModel> userRoles = new HashSet<RoleModel>();
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "volt_forge_user_address",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "address_id"))
+    private List<AddressModel> addressModel = new ArrayList<AddressModel>();
+
+
+    @OneToMany(mappedBy = "userModel",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            orphanRemoval = true)
+    private Set<ProductModel> products;
+
+    public UserModel() {
+    }
+
+    public UserModel(String userFirstName,
+                     String userMiddleName,
+                     String userLastName,
+                     String userPassword,
+                     String userMobileNumber,
+                     String userEmail,
+                     Set<RoleModel> roles,
+                     Set<ProductModel> products) {
+        this.userFirstName = userFirstName;
+        this.userMiddleName = userMiddleName;
+        this.userLastName = userLastName;
+        this.userPassword = userPassword;
+        this.userMobileNumber = userMobileNumber;
+        this.userEmail = userEmail;
+        this.userRoles = roles;
+        this.products = products;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getUserFirstName() {
+        return userFirstName;
+    }
+
+    public void setUserFirstName(String userFirstName) {
+        this.userFirstName = userFirstName;
+    }
+
+    public String getUserMiddleName() {
+        return userMiddleName;
+    }
+
+    public void setUserMiddleName(String userMiddleName) {
+        this.userMiddleName = userMiddleName;
+    }
+
+    public String getUserLastName() {
+        return userLastName;
+    }
+
+    public void setUserLastName(String userLastName) {
+        this.userLastName = userLastName;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getUserMobileNumber() {
+        return userMobileNumber;
+    }
+
+    public void setUserMobileNumber(String userMobileNumber) {
+        this.userMobileNumber = userMobileNumber;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    public Set<RoleModel> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(Set<RoleModel> userRoles) {
+        this.userRoles = userRoles;
+    }
+
+    public Set<ProductModel> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<ProductModel> products) {
+        this.products = products;
+    }
+}
