@@ -1,4 +1,4 @@
-package com.voltforge.app.respository;
+package com.voltforge.app.repository;
 
 import com.voltforge.app.model.CategoryModel;
 import org.springframework.data.jpa.repository.JpaRepository;

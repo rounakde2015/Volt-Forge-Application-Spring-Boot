@@ -20,6 +20,11 @@ public class UserModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Column(name = "user_signin_name")
+    @NotBlank
+    @Size(min = 10, max = 50)
+    private String userName;
+
     @Column(name = "user_first_name")
     @NotBlank
     @Size(max = 50)
@@ -71,7 +76,8 @@ public class UserModel {
     public UserModel() {
     }
 
-    public UserModel(String userFirstName,
+    public UserModel(String userName,
+                     String userFirstName,
                      String userMiddleName,
                      String userLastName,
                      String userPassword,
@@ -79,6 +85,7 @@ public class UserModel {
                      String userEmail,
                      Set<RoleModel> roles,
                      Set<ProductModel> products) {
+        this.userName = userName;
         this.userFirstName = userFirstName;
         this.userMiddleName = userMiddleName;
         this.userLastName = userLastName;
@@ -95,6 +102,14 @@ public class UserModel {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getUserFirstName() {

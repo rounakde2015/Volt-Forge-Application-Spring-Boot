@@ -1,0 +1,25 @@
+package com.voltforge.app.security.service;
+
+import com.voltforge.app.model.UserModel;
+import com.voltforge.app.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+public class UserDetailsServiceImpl implements UserDetailsService {
+    @Autowired
+    UserRepository userRepository;
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserModel userModel = userRepository.findByUserName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("No user found with username: " + username));
+
+        return UserDetailsImpl.build(userModel);
+    }
+}

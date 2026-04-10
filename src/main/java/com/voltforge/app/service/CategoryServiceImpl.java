@@ -5,7 +5,7 @@ import com.voltforge.app.exception.ResourceNotFoundException;
 import com.voltforge.app.model.CategoryModel;
 import com.voltforge.app.payload.CategoryDTO;
 import com.voltforge.app.payload.CategoryResponse;
-import com.voltforge.app.respository.CategoryRepository;
+import com.voltforge.app.repository.CategoryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
