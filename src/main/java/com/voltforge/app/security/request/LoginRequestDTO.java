@@ -1,13 +1,13 @@
-package com.voltforge.app.security.jwt;
+package com.voltforge.app.security.request;
 
-public class LoginRequest {
+public class LoginRequestDTO {
     private String loginUsername;
     private String loginPassword;
 
-    public LoginRequest() {
+    public LoginRequestDTO() {
     }
 
-    public LoginRequest(String loginUsername, String loginPassword) {
+    public LoginRequestDTO(String loginUsername, String loginPassword) {
         this.loginUsername = loginUsername;
         this.loginPassword = loginPassword;
     }

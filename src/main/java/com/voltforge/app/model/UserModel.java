@@ -82,9 +82,7 @@ public class UserModel {
                      String userLastName,
                      String userPassword,
                      String userMobileNumber,
-                     String userEmail,
-                     Set<RoleModel> roles,
-                     Set<ProductModel> products) {
+                     String userEmail) {
         this.userName = userName;
         this.userFirstName = userFirstName;
         this.userMiddleName = userMiddleName;
@@ -92,8 +90,6 @@ public class UserModel {
         this.userPassword = userPassword;
         this.userMobileNumber = userMobileNumber;
         this.userEmail = userEmail;
-        this.userRoles = roles;
-        this.products = products;
     }
 
     public Long getUserId() {

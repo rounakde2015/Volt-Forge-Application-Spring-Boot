@@ -1,16 +1,16 @@
-package com.voltforge.app.security.jwt;
+package com.voltforge.app.security.response;
 
 import java.util.List;
 
-public class LoginResponse {
+public class UserInfoResponseDTO {
     private String jwtToken;
     private String loginUsername;
     private List<String> roles;
 
-    public LoginResponse() {
+    public UserInfoResponseDTO() {
     }
 
-    public LoginResponse(String jwtToken, String loginUsername, List<String> roles) {
+    public UserInfoResponseDTO(String jwtToken, String loginUsername, List<String> roles) {
         this.jwtToken = jwtToken;
         this.loginUsername = loginUsername;
         this.roles = roles;
