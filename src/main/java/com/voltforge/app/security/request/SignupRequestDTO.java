@@ -29,7 +29,7 @@ public class SignupRequestDTO {
     private String userMobileNumber;
 
     @NotBlank
-    @Size(min = 10, max = 20)
+    @Size(max = 100)
     private String password;
 
     @NotBlank

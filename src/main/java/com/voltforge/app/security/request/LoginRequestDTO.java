@@ -1,7 +1,14 @@
 package com.voltforge.app.security.request;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class LoginRequestDTO {
+    @NotBlank
     private String loginUsername;
+
+    @NotBlank
+    @Size(max = 100)
     private String loginPassword;
 
     public LoginRequestDTO() {

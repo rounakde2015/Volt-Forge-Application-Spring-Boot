@@ -1,10 +1,16 @@
 package com.voltforge.app.security.web;
 
 
+import com.voltforge.app.model.AppRole;
+import com.voltforge.app.model.RoleModel;
+import com.voltforge.app.model.UserModel;
+import com.voltforge.app.repository.RoleRespository;
+import com.voltforge.app.repository.UserRepository;
 import com.voltforge.app.security.jwt.AuthEntryPointJwt;
 import com.voltforge.app.security.jwt.AuthTokenFilter;
 import com.voltforge.app.security.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,9 +22,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.Set;
 
 @Configuration
 @EnableWebSecurity
@@ -38,6 +47,7 @@ public class WebSecurityConfig {
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(userDetailsService);
+
         authenticationProvider.setPasswordEncoder(passwordEncoder());
 
         return authenticationProvider;
@@ -54,10 +64,11 @@ public class WebSecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/auth/**").permitAll()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api/v1/admin/**").permitAll()
-                        .requestMatchers("/api/v1/public/**").permitAll()
+                        //.requestMatchers("/api/v1/admin/**").permitAll()
+                        //.requestMatchers("/api/v1/public/**").permitAll()
                         .requestMatchers("/swagger-ui/*/").permitAll()
                         .requestMatchers("/api/test/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
@@ -85,5 +96,79 @@ public class WebSecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    /*@Bean
+    public CommandLineRunner initDbData(RoleRespository roleRespository, UserRepository  userRepository, PasswordEncoder passwordEncoder) {
+        return (args) -> {
+            RoleModel userRole = roleRespository.findByRoleName(AppRole.ROLE_USER)
+                    .orElseGet(() -> {
+                        RoleModel newUserRole = new RoleModel(AppRole.ROLE_USER);
+                        return roleRespository.save(newUserRole);
+                    });
+
+            RoleModel adminRole = roleRespository.findByRoleName(AppRole.ROLE_ADMIN)
+                    .orElseGet(() -> {
+                        RoleModel newAdminRole = new RoleModel(AppRole.ROLE_ADMIN);
+                        return roleRespository.save(newAdminRole);
+                    });
+
+            RoleModel sellerRole = roleRespository.findByRoleName(AppRole.ROLE_SELLER)
+                    .orElseGet(() -> {
+                        RoleModel newSellerRole = new RoleModel(AppRole.ROLE_SELLER);
+                        return roleRespository.save(newSellerRole);
+                    });
+
+            Set<RoleModel> userRoles = Set.of(userRole);
+            Set<RoleModel> adminRoles = Set.of(adminRole);
+            Set<RoleModel> sellerRoles = Set.of(sellerRole);
+
+            if (!userRepository.existsByUserName("user1")) {
+                UserModel user1 = new UserModel("user1",
+                        "Rakesh",
+                        "Kumar",
+                        "Das",
+                        passwordEncoder.encode("password1234"),
+                        "9876543210",
+                        "rakeshkumar@gmail.com");
+                userRepository.save(user1);
+            }
+
+            if (!userRepository.existsByUserName("seller1")) {
+                UserModel seller1 = new UserModel("seller1",
+                        "Sanjay",
+                        "",
+                        "Sharma",
+                        passwordEncoder.encode("password4321"),
+                        "9876543211",
+                        "sanajaysharma@gmail.com");
+                userRepository.save(seller1);
+            }
+
+            if (!userRepository.existsByUserName("admin")) {
+                UserModel admin = new UserModel("admin",
+                        "Bhajan",
+                        "Lal",
+                        "Singh",
+                        passwordEncoder.encode("password6789"),
+                        "9876554321",
+                        "bhajanlalsingh@gmail.com");
+                userRepository.save(admin);
+            }
+
+            userRepository.findByUserName("user1").ifPresent(user -> {
+                user.setUserRoles(userRoles);
+                userRepository.save(user);
+            });
+
+            userRepository.findByUserName("seller1").ifPresent(seller -> {
+                seller.setUserRoles(sellerRoles);
+                userRepository.save(seller);
+            });
+
+            userRepository.findByUserName("admin").ifPresent(admin -> {
+                admin.setUserRoles(adminRoles);
+                userRepository.save(admin);
+            });
+        };
+    }*/
 
 }

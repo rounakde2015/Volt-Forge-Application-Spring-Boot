@@ -9,6 +9,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +21,10 @@ import java.util.Date;
 public class JwtUtils {
     private Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
+    @Value("${spring.app.jwtSecretKey}")
     private String jwtSecretKey;
 
+    @Value("${spring.app.jwtExpirationMs}")
     private int jwtExpirationInMilliSeconds;
 
     public String getJwtFromHeader(HttpServletRequest request) {
@@ -56,7 +59,7 @@ public class JwtUtils {
                 .getSubject();
     }
 
-    private  Key key() {
+    private Key key() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecretKey));
     }
 

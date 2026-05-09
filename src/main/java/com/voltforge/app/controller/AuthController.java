@@ -1,5 +1,6 @@
 package com.voltforge.app.controller;
 
+import com.voltforge.app.exception.GlobalExceptionHandler;
 import com.voltforge.app.model.AppRole;
 import com.voltforge.app.model.RoleModel;
 import com.voltforge.app.model.UserModel;
@@ -12,6 +13,8 @@ import com.voltforge.app.security.response.MessageResponseDTO;
 import com.voltforge.app.security.response.UserInfoResponseDTO;
 import com.voltforge.app.security.service.UserDetailsImpl;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +26,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/api/v1/auth")
 public class AuthController {
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -42,6 +48,7 @@ public class AuthController {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/signin")
@@ -53,7 +60,7 @@ public class AuthController {
         } catch (AuthenticationException e) {
             Map<String, Object> response = new HashMap<>();
 
-            response.put("message", "Invalid username and/or password");
+            response.put("message", "Invalid username or password");
             response.put("status", "false");
 
             return new ResponseEntity<Object>(response, HttpStatus.NOT_FOUND);
@@ -70,7 +77,7 @@ public class AuthController {
                 .map(role -> role.getAuthority())
                 .collect(Collectors.toList());
 
-        UserInfoResponseDTO userInfoResponseDTO = new UserInfoResponseDTO(userDetails.getUsername(), jwtToken, roles);
+        UserInfoResponseDTO userInfoResponseDTO = new UserInfoResponseDTO(jwtToken, userDetails.getUsername(), roles);
 
         return ResponseEntity.ok(userInfoResponseDTO);
 

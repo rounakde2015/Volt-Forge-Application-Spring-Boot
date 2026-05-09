@@ -22,7 +22,7 @@ public class UserModel {
 
     @Column(name = "user_signin_name")
     @NotBlank
-    @Size(min = 10, max = 50)
+    @Size(min = 5, max = 50)
     private String userName;
 
     @Column(name = "user_first_name")
@@ -51,7 +51,7 @@ public class UserModel {
     @Pattern(regexp = "^(?:\\+91|91)?[1-9][0-9]{9}$", message = "Invalid mobile number")
     private String userMobileNumber;
 
-    @Column(name = "user_password")
+    @Column(name = "user_password", length = 100)
     @NotBlank
     private String userPassword;
 
