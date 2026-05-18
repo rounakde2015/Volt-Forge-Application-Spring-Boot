@@ -9,18 +9,18 @@ import java.util.Set;
 
 public class SignupRequestDTO {
     @NotBlank
-    @Size(min = 10, max = 20)
+    @Size(min = 5, max = 20)
     private String userName;
 
     @NotBlank
-    @Size(min = 10, max = 20)
+    @Size(min = 5, max = 20)
     private String userFirstName;
 
-    @Size(min = 10, max = 20)
+    @Size(min = 5, max = 20)
     private String userMiddleName;
 
     @NotBlank
-    @Size(min = 10, max = 20)
+    @Size(min = 2, max = 20)
     private String userLastName;
 
     @NotBlank
@@ -34,7 +34,7 @@ public class SignupRequestDTO {
 
     @NotBlank
     @Email
-    @Size(min = 10, max = 20)
+    @Size(min = 10, max = 30)
     private String userEmail;
 
     private Set<String> userRoles;
