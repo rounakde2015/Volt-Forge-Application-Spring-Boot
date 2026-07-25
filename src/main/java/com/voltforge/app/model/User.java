@@ -15,7 +15,7 @@ import java.util.Set;
 @Table(name = "VoltForgeUsers", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"user_mobile_number", "user_enail_id"})
 })
-public class UserModel {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -59,30 +59,33 @@ public class UserModel {
     @JoinTable(name = "volt_forge_users_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<RoleModel> userRoles = new HashSet<RoleModel>();
+    private Set<Role> userRoles = new HashSet<Role>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "volt_forge_user_address",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "address_id"))
-    private List<AddressModel> addressModel = new ArrayList<AddressModel>();
+    private List<Address> address = new ArrayList<Address>();
 
 
-    @OneToMany(mappedBy = "userModel",
+    @OneToMany(mappedBy = "user",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE},
             orphanRemoval = true)
-    private Set<ProductModel> products;
+    private Set<Product> products;
 
-    public UserModel() {
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE,  CascadeType.REFRESH})
+    private Cart cart;
+
+    public User() {
     }
 
-    public UserModel(String userName,
-                     String userFirstName,
-                     String userMiddleName,
-                     String userLastName,
-                     String userPassword,
-                     String userMobileNumber,
-                     String userEmail) {
+    public User(String userName,
+                String userFirstName,
+                String userMiddleName,
+                String userLastName,
+                String userPassword,
+                String userMobileNumber,
+                String userEmail) {
         this.userName = userName;
         this.userFirstName = userFirstName;
         this.userMiddleName = userMiddleName;
@@ -156,19 +159,35 @@ public class UserModel {
         this.userPassword = userPassword;
     }
 
-    public Set<RoleModel> getUserRoles() {
+    public Set<Role> getUserRoles() {
         return userRoles;
     }
 
-    public void setUserRoles(Set<RoleModel> userRoles) {
+    public void setUserRoles(Set<Role> userRoles) {
         this.userRoles = userRoles;
     }
 
-    public Set<ProductModel> getProducts() {
+    public Set<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(Set<ProductModel> products) {
+    public void setProducts(Set<Product> products) {
         this.products = products;
+    }
+
+    public List<Address> getAddressModel() {
+        return address;
+    }
+
+    public void setAddressModel(List<Address> address) {
+        this.address = address;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }

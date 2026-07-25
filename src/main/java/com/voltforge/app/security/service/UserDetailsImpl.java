@@ -1,7 +1,7 @@
 package com.voltforge.app.security.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.voltforge.app.model.UserModel;
+import com.voltforge.app.model.User;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -41,7 +41,7 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserDetailsImpl build(UserModel user) {
+    public static UserDetailsImpl build(User user) {
         List<GrantedAuthority> authorities = user.getUserRoles()
                 .stream()
                 .map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))

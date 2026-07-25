@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "VoltForgeAddress")
-public class AddressModel {
+public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long addressId;
@@ -41,13 +41,13 @@ public class AddressModel {
     @Pattern(regexp = "^[1-9][0-9]{2}\\s?[0-9]{3}$", message = "Invalid PIN Code")
     private String PINCode;
 
-    @ManyToMany(mappedBy = "addressModel")
-    private List<UserModel> users = new ArrayList<>();
+    @ManyToMany(mappedBy = "address")
+    private List<User> users = new ArrayList<>();
 
-    public AddressModel() {
+    public Address() {
     }
 
-    public AddressModel(String streetName, String buildingName, String state, String country, String PINCode) {
+    public Address(String streetName, String buildingName, String state, String country, String PINCode) {
         this.streetName = streetName;
         this.buildingName = buildingName;
         this.state = state;

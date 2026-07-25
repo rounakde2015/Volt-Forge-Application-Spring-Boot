@@ -4,19 +4,22 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(name = "VoltForgeProducts")
-public class ProductModel {
+public class Product {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
     @NotBlank
-    @Size(max = 3, message = "Product name must contain atleast 3 characters")
+    @Size(min = 3, message = "Product name must contain atleast 3 characters")
     private String productName;
 
     @NotBlank
-    @Size(max = 6, message = "Product name must contain atleast 6 characters")
+    @Size(min = 6, message = "Product name must contain atleast 6 characters")
     private String productDescription;
 
     private Integer productQuantity;
@@ -31,25 +34,28 @@ public class ProductModel {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private CategoryModel categoryModel;
+    private Category category;
 
     @ManyToOne
     @JoinColumn(name = "seller_id")
-    private UserModel userModel;
+    private User user;
 
-    public ProductModel() {
+    @OneToMany(mappedBy = "product", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    private List<CartItem> products = new ArrayList<>();
+
+    public Product() {
     }
 
-    public ProductModel(Long productId,
-                        String productName,
-                        String productDescription,
-                        double productPrice,
-                        Integer productQuantity,
-                        double productDiscountPercentage,
-                        double productSpecialPrice,
-                        String productImage,
-                        CategoryModel categoryModel,
-                        UserModel userModel) {
+    public Product(Long productId,
+                   String productName,
+                   String productDescription,
+                   double productPrice,
+                   Integer productQuantity,
+                   double productDiscountPercentage,
+                   double productSpecialPrice,
+                   String productImage,
+                   Category category,
+                   User user) {
         this.productId = productId;
         this.productName = productName;
         this.productDescription = productDescription;
@@ -58,8 +64,8 @@ public class ProductModel {
         this.productDiscountPercentage = productDiscountPercentage;
         this.productSpecialPrice = productSpecialPrice;
         this.productImage = productImage;
-        this.categoryModel = categoryModel;
-        this.userModel = userModel;
+        this.category = category;
+        this.user = user;
     }
 
     public Long getProductId() {
@@ -126,19 +132,19 @@ public class ProductModel {
         this.productImage = productImage;
     }
 
-    public CategoryModel getCategoryModel() {
-        return categoryModel;
+    public Category getCategoryModel() {
+        return category;
     }
 
-    public void setCategoryModel(CategoryModel categoryModel) {
-        this.categoryModel = categoryModel;
+    public void setCategoryModel(Category category) {
+        this.category = category;
     }
 
-    public UserModel getUserModel() {
-        return userModel;
+    public User getUserModel() {
+        return user;
     }
 
-    public void setUserModel(UserModel userModel) {
-        this.userModel = userModel;
+    public void setUserModel(User user) {
+        this.user = user;
     }
 }

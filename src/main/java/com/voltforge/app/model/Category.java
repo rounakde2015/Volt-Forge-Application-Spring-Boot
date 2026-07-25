@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity(name = "VoltForgeCategories")
 
-public class CategoryModel {
+public class Category {
     @Id
     @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,16 +18,16 @@ public class CategoryModel {
     @Size(min = 5, message = "Category name must contain atleast 5 characters.")
     private String categoryName;
 
-    @OneToMany(mappedBy = "categoryModel",  cascade = CascadeType.ALL)
-    private List<ProductModel> products;
+    @OneToMany(mappedBy = "category",  cascade = CascadeType.ALL)
+    private List<Product> products;
 
-    public CategoryModel(Long categoryId, String categoryName,  List<ProductModel> products) {
+    public Category(Long categoryId, String categoryName, List<Product> products) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.products = products;
     }
 
-    public CategoryModel() {
+    public Category() {
 
     }
 
@@ -47,11 +47,11 @@ public class CategoryModel {
         this.categoryName = categoryName;
     }
 
-    public List<ProductModel> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(List<ProductModel> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 }

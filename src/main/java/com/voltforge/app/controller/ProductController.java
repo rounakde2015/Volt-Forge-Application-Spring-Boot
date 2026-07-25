@@ -1,7 +1,6 @@
 package com.voltforge.app.controller;
 
 import com.voltforge.app.config.AppConstants;
-import com.voltforge.app.model.ProductModel;
 import com.voltforge.app.payload.ProductDTO;
 import com.voltforge.app.payload.ProductResponse;
 import com.voltforge.app.service.ProductService;

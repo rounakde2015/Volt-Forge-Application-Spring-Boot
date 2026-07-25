@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "VoltForgeRoles")
-public class RoleModel {
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
@@ -14,10 +14,10 @@ public class RoleModel {
     @Column(length = 20, name = "role_name")
     private AppRole roleName;
 
-    public RoleModel() {
+    public Role() {
     }
 
-    public RoleModel(AppRole roleName) {
+    public Role(AppRole roleName) {
         this.roleName = roleName;
     }
 

@@ -1,8 +1,8 @@
 package com.voltforge.app.controller;
 
 import com.voltforge.app.model.AppRole;
-import com.voltforge.app.model.RoleModel;
-import com.voltforge.app.model.UserModel;
+import com.voltforge.app.model.Role;
+import com.voltforge.app.model.User;
 import com.voltforge.app.repository.RoleRespository;
 import com.voltforge.app.repository.UserRepository;
 import com.voltforge.app.security.jwt.JwtUtils;
@@ -97,7 +97,7 @@ public class AuthController {
                     .body(new MessageResponseDTO("Error: Email is already in use!"));
         }
 
-        UserModel newUser =  new UserModel(signupRequestDTO.getUserName(),
+        User newUser =  new User(signupRequestDTO.getUserName(),
                 signupRequestDTO.getUserFirstName(),
                 signupRequestDTO.getUserMiddleName(),
                 signupRequestDTO.getUserLastName(),
@@ -106,38 +106,38 @@ public class AuthController {
                 signupRequestDTO.getUserEmail());
 
         Set<String> strRoles = signupRequestDTO.getUserRoles();
-        Set<RoleModel> roleModels = new HashSet<>();
+        Set<Role> roles = new HashSet<>();
 
         if (strRoles == null && strRoles.isEmpty()) {
-            RoleModel userRole = roleRespository
+            Role userRole = roleRespository
                     .findByRoleName(AppRole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role Not Found"));
-            roleModels.add(userRole);
+            roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
-                        RoleModel adminRole = roleRespository
+                        Role adminRole = roleRespository
                                 .findByRoleName(AppRole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role Not Found"));
-                        roleModels.add(adminRole);
+                        roles.add(adminRole);
                         break;
                     case "seller":
-                        RoleModel sellerRole = roleRespository
+                        Role sellerRole = roleRespository
                                 .findByRoleName(AppRole.ROLE_SELLER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role Not Found"));
-                        roleModels.add(sellerRole);
+                        roles.add(sellerRole);
                         break;
                     default:
-                        RoleModel userRole = roleRespository
+                        Role userRole = roleRespository
                                 .findByRoleName(AppRole.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role Not Found"));
-                        roleModels.add(userRole);
+                        roles.add(userRole);
                 }
             });
         }
 
-        newUser.setUserRoles(roleModels);
+        newUser.setUserRoles(roles);
         userRepository.save(newUser);
 
         return ResponseEntity.ok(new MessageResponseDTO("User registered successfully!"));
