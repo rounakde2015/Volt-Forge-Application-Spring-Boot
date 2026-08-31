@@ -1,10 +1,16 @@
 package com.voltforge.app.security.web;
 
 
+import com.voltforge.app.model.AppRole;
+import com.voltforge.app.model.Role;
+import com.voltforge.app.model.User;
+import com.voltforge.app.repository.RoleRespository;
+import com.voltforge.app.repository.UserRepository;
 import com.voltforge.app.security.jwt.AuthEntryPointJwt;
 import com.voltforge.app.security.jwt.AuthTokenFilter;
 import com.voltforge.app.security.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +24,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.Set;
 
 @Configuration
 @EnableWebSecurity
@@ -88,32 +96,32 @@ public class WebSecurityConfig {
     }
 
     /*@Bean
-    public CommandLineRunner initDbData(RoleRespository roleRespository, UserRepository  userRepository, PasswordEncoder passwordEncoder) {
+    public CommandLineRunner initDbData(RoleRespository roleRespository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return (args) -> {
-            RoleModel userRole = roleRespository.findByRoleName(AppRole.ROLE_USER)
+            Role userRole = roleRespository.findByRoleName(AppRole.ROLE_USER)
                     .orElseGet(() -> {
-                        RoleModel newUserRole = new RoleModel(AppRole.ROLE_USER);
+                        Role newUserRole = new Role(AppRole.ROLE_USER);
                         return roleRespository.save(newUserRole);
                     });
 
-            RoleModel adminRole = roleRespository.findByRoleName(AppRole.ROLE_ADMIN)
+            Role adminRole = roleRespository.findByRoleName(AppRole.ROLE_ADMIN)
                     .orElseGet(() -> {
-                        RoleModel newAdminRole = new RoleModel(AppRole.ROLE_ADMIN);
+                        Role newAdminRole = new Role(AppRole.ROLE_ADMIN);
                         return roleRespository.save(newAdminRole);
                     });
 
-            RoleModel sellerRole = roleRespository.findByRoleName(AppRole.ROLE_SELLER)
+            Role sellerRole = roleRespository.findByRoleName(AppRole.ROLE_SELLER)
                     .orElseGet(() -> {
-                        RoleModel newSellerRole = new RoleModel(AppRole.ROLE_SELLER);
+                        Role newSellerRole = new Role(AppRole.ROLE_SELLER);
                         return roleRespository.save(newSellerRole);
                     });
 
-            Set<RoleModel> userRoles = Set.of(userRole);
-            Set<RoleModel> adminRoles = Set.of(adminRole);
-            Set<RoleModel> sellerRoles = Set.of(sellerRole);
+            Set<Role> userRoles = Set.of(userRole);
+            Set<Role> adminRoles = Set.of(adminRole);
+            Set<Role> sellerRoles = Set.of(sellerRole);
 
             if (!userRepository.existsByUserName("user1")) {
-                UserModel user1 = new UserModel("user1",
+                User user1 = new User("user1",
                         "Rakesh",
                         "Kumar",
                         "Das",
@@ -124,7 +132,7 @@ public class WebSecurityConfig {
             }
 
             if (!userRepository.existsByUserName("seller1")) {
-                UserModel seller1 = new UserModel("seller1",
+                User seller1 = new User("seller1",
                         "Sanjay",
                         "",
                         "Sharma",
@@ -135,7 +143,7 @@ public class WebSecurityConfig {
             }
 
             if (!userRepository.existsByUserName("admin")) {
-                UserModel admin = new UserModel("admin",
+                User admin = new User("admin",
                         "Bhajan",
                         "Lal",
                         "Singh",

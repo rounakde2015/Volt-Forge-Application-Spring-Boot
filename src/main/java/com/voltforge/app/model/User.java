@@ -61,10 +61,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> userRoles = new HashSet<Role>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "volt_forge_user_address",
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    /*@JoinTable(name = "volt_forge_user_address",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "address_id"))
+            inverseJoinColumns = @JoinColumn(name = "address_id"))*/
     private List<Address> address = new ArrayList<Address>();
 
 
@@ -175,11 +175,11 @@ public class User {
         this.products = products;
     }
 
-    public List<Address> getAddressModel() {
+    public List<Address> getAddress() {
         return address;
     }
 
-    public void setAddressModel(List<Address> address) {
+    public void setAddress(List<Address> address) {
         this.address = address;
     }
 

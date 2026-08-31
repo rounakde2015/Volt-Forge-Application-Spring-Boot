@@ -55,6 +55,8 @@ public class CartController {
     public ResponseEntity<CartDTO> updateCartProductQuantity(@PathVariable Long productId, @PathVariable String cartOperation) {
         CartDTO cartDTO = cartService.updateProductQuantityInCart(productId, cartOperation.equalsIgnoreCase("delete") ? -1 : 1);
 
+        System.out.println("Cart DTO = " + cartDTO);
+
         return new ResponseEntity<CartDTO>(cartDTO, HttpStatus.OK);
     }
 
